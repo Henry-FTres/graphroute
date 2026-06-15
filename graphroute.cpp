@@ -60,6 +60,22 @@ public:
     int size() {
         return graph.size();
     }
-    
+
+    void show()
+    {
+        std::ofstream dot("/tmp/graphviz.dot");
+        dot << "digraph{\n";
+        for (const auto& [key, node] : graph) {
+            dot << "\t\"" << key << "\" -> {";
+            for (const auto& link : node.links) {
+                dot << "\"" << link->value << "\" ";
+            }
+            dot << "};\n";
+        }
+        dot << "}\n";
+        dot.close();
+        system("dot -Tx11 /tmp/graphviz.dot");
+    }
+
 };
 }
