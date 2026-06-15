@@ -1,8 +1,22 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <sstream>
 #include "graphroute.cpp"
 
 using namespace std;
+
+vector<string> split(const string& line, char sep){
+
+    vector<string> parts;
+    stringstream stream(line); //como um buffer que pode ler pedaço por pedaço
+    
+    string aux;
+    while (getline(stream, aux, sep)){ //lê do stream até encontrar uma vírgula, guarda em aux, e adiciona no vetor. Ele repete até acabar a linha.
+        parts.push_back(aux);
+    }
+    return parts;
+}
 
 int menu(){
     int opcao;
@@ -38,17 +52,23 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    string auxiliar;
+    getline(arq,auxiliar);
+    while(getline(arq, auxiliar)){
+        auto fields = split(auxiliar, ',');
+    }
+
     cout << "Grafo de roteamento inicializado" << "\n"
-         << "Vértices únicos (IPs): " 
+         << "Vértices únicos (IPs): "
          //<< todo count_vertices()
-         << " | Arestas: " 
+         << " | Arestas: "
          //<< todo count_edges()
          << "\n";
 
     int opcao;
     do {
         opcao = menu();
-        
+
         switch (opcao) {
         case 1:
             grafo.show();
@@ -66,6 +86,10 @@ int main(int argc, char* argv[]) {
             break;
         }
     } while (opcao != 0);
+
+
+
+
 
     arq.close();
 
