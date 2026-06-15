@@ -60,9 +60,9 @@ int main(int argc, char* argv[]) {
 
     cout << "Grafo de roteamento inicializado" << "\n"
          << "Vértices únicos (IPs): "
-         //<< todo count_vertices()
+         << graph.vertex_count()
          << " | Arestas: "
-         //<< todo count_edges()
+         << graph.edge_count()
          << "\n";
 
     int opcao;
@@ -72,28 +72,25 @@ int main(int argc, char* argv[]) {
 
         
         
-        switch (opcao) {
-            case 1:
+    switch (opcao) {
+        case 1:
             graph.show();
             break;
-            case 2:
+        case 2:
             //TODO encontrar_menor_caminho();
             break;
-            case 3:
+        case 3:
             //TODO calcular_diametro_grafo();
             break;
-            case 4:
+        case 4:
             //TODO identificar_roteadores_criticos();
             break;
-            case 0:
+        case 0:
             break;
-        }
+    }
     } while (opcao != 0);
     
-    // Loop for reading the file
-    cout << "Arquivo lido com sucesso!" << "\n"
-         << "Total de vértices únicas: " << graph.vertex_count() << "\n"
-         << "Total de arestas: " << graph.edge_count() << "\n";
+    
     
 
 
