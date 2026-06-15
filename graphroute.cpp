@@ -9,7 +9,7 @@ class Graphroute{
 private:
     struct node{
         T value;
-        int grauEntrada = 0; //dentro do nó ou fora na classe como um unordered map???
+        int inDegree = 0; //dentro do nó ou fora na classe como um unordered map???
         std::unordered_set<node*> links;
     };
     std::unordered_map<T, node> graph;
@@ -31,6 +31,21 @@ public:
         aux.value = val;
         graph[val] = aux;
     }
+
+    void insert_link(const T& from, const T& to){
+        auto pfrom = find(from);
+        if (!pfrom)
+            return;
+        auto pto = find(to);
+        if (!pto)
+            return;
+
+        if(pfrom->links.count(pto)==0){
+            pfrom->links.insert(pto);
+            pto -> inDegree++;
+        }
+    }
+    
     
 };
 }
