@@ -77,5 +77,9 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot");
     }
 
+    int edge_size() {
+        return total_edges;
+    }
+
 };
 }
