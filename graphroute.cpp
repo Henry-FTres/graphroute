@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <unordered_set>
+#include <fstream>
 
 namespace graph{
 
@@ -16,7 +17,7 @@ private:
         std::unordered_set<node*> links;
     };
 
-    std::unordered_map<T, node> graph;
+    unordered_map<T, node> graph;
 
     node* find(const T& val){
         auto it = graph.find(val);
@@ -25,8 +26,6 @@ private:
         }
         return &it->second; //se encontrou retorna o nó
     }
-
-public:
 
     void insert_node(const T& val){
         if (graph.count(val) != 0)
@@ -46,17 +45,23 @@ public:
 
         if(pfrom->links.count(pto)==0){
             pfrom->links.insert(pto);
-            pto -> inDegree++;
+            pto->inDegree++;
+            total_edges++;
         }
     }
+
+public:
+
     
+    
+    //adiciona dois vértices e uma aresta que liga do from para o to
     void insert_edge(const T& hop_from, const T& hop_to) {
         insert_node(hop_from);
         insert_node(hop_to);
         insert_link(hop_from, hop_to);
-        total_edges++;
     }
 
+    //retorna quantos vértices tem
     int size() {
         return graph.size();
     }
@@ -77,6 +82,7 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot");
     }
 
+    //retorna a quantia de arestas
     int edge_size() {
         return total_edges;
     }
