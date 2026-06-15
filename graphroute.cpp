@@ -8,8 +8,6 @@ class Graphroute{
 
 private:
 
-    int total_edges = 0;
-
     struct node{
         T value;
         int inDegree = 0; //dentro do nó ou fora na classe como um unordered map???
@@ -17,6 +15,7 @@ private:
     };
 
     std::unordered_map<T, node> graph;
+    int total_edges = 0;
 
     node* find(const T& val){
         auto it = graph.find(val);
@@ -51,13 +50,14 @@ public:
     }
     
     void insert_edge(const T& hop_from, const T& hop_to) {
+        if (graph.find(hop_from) || graph.find(hop_to))
         insert_node(hop_from);
         insert_node(hop_to);
         insert_link(hop_from, hop_to);
         total_edges++;
     }
 
-    int size() {
+    int vertex_count() {
         return graph.size();
     }
 
@@ -77,9 +77,11 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot");
     }
 
-    int edge_size() {
+    int edge_count() {
         return total_edges;
     }
+
+
 
 };
 }
