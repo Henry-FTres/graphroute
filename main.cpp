@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include "graphroute.cpp"
 
 using namespace std;
 
@@ -19,6 +20,12 @@ int main(int argc, char* argv[]) {
 
 
 
+
+
+    // Loop for reading the file
+    cout << "Arquivo lido com sucesso!" << "\n"
+         << "Total de vértices únicas: " << graph.vertex_count() << "\n"
+         << "Total de arestas: " << graph.edge_count() << "\n";
 
 
 
