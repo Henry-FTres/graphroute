@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include "graphroute.cpp"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ int menu(){
 }
 
 int main(int argc, char* argv[]) {
-
+    graph::Graphroute<string> grafo; 
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
         return 1;
@@ -39,18 +40,18 @@ int main(int argc, char* argv[]) {
 
     cout << "Grafo de roteamento inicializado" << "\n"
          << "Vértices únicos (IPs): " 
-         <<  //todo count_vertices()
+         //<< todo count_vertices()
          << " | Arestas: " 
-         <<  //todo count_edges()
+         //<< todo count_edges()
          << "\n";
 
     int opcao;
     do {
         opcao = menu();
-
+        
         switch (opcao) {
         case 1:
-            show();
+            grafo.show();
             break;
         case 2:
             //TODO encontrar_menor_caminho();
@@ -62,7 +63,6 @@ int main(int argc, char* argv[]) {
             //TODO identificar_roteadores_criticos();
             break;
         case 0:
-            rede.show();
             break;
         }
     } while (opcao != 0);
