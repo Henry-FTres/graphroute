@@ -8,15 +8,15 @@ class Graphroute{
 
 private:
 
-    std::unordered_map<T, node> graph;
     int total_edges = 0;
-    
+
     struct node{
         T value;
         int inDegree = 0; //dentro do nó ou fora na classe como um unordered map???
         std::unordered_set<node*> links;
     };
 
+    std::unordered_map<T, node> graph;
 
     node* find(const T& val){
         auto it = graph.find(val);
@@ -50,11 +50,15 @@ public:
         }
     }
     
-    insert_edge(const T& hop_from, const T& hop_to) {
+    void insert_edge(const T& hop_from, const T& hop_to) {
         insert_node(hop_from);
         insert_node(hop_to);
         insert_link(hop_from, hop_to);
         total_edges++;
+    }
+
+    int size() {
+        return graph.size();
     }
     
 };
