@@ -3,6 +3,26 @@
 
 using namespace std;
 
+int menu(){
+    int opcao;
+    while (true) {
+        cout << "================================================================\n"
+             << "1. Exibir grafo completo.\n"
+             << "2. Encontrar menor caminho.\n"
+             << "3. Calcular diâmetro do grafo.\n"
+             << "4. Identificar Roteadores Críticos.\n"
+             << "0. Sair.\n"
+             << "================================================================\n"
+             << "Escolha uma opção: ";
+        cin >> opcao;
+        cin.ignore();
+        if (opcao == 1 || opcao == 2 || opcao == 3 || opcao == 4 || opcao == 0) {
+            return opcao;
+        }
+        cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
+    }
+}
+
 int main(int argc, char* argv[]) {
 
     if (argc != 2) {
@@ -17,14 +37,35 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    cout << "Grafo de roteamento inicializado" << "\n"
+         << "Vértices únicos (IPs): " 
+         <<  //todo count_vertices()
+         << " | Arestas: " 
+         <<  //todo count_edges()
+         << "\n";
 
+    int opcao;
+    do {
+        opcao = menu();
 
-
-
-
-
-
-
+        switch (opcao) {
+        case 1:
+            show();
+            break;
+        case 2:
+            //TODO encontrar_menor_caminho();
+            break;
+        case 3:
+            //TODO calcular_diametro_grafo();
+            break;
+        case 4:
+            //TODO identificar_roteadores_criticos();
+            break;
+        case 0:
+            rede.show();
+            break;
+        }
+    } while (opcao != 0);
 
     arq.close();
 
