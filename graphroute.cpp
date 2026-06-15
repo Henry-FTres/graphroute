@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <unordered_set>
+#include <fstream>
 
 namespace graph{
 
@@ -25,8 +26,6 @@ private:
         return &it->second; //se encontrou retorna o nó
     }
 
-public:
-
     void insert_node(const T& val){
         if (graph.count(val) != 0)
             return;
@@ -45,16 +44,21 @@ public:
 
         if(pfrom->links.count(pto)==0){
             pfrom->links.insert(pto);
-            pto -> inDegree++;
+            pto->inDegree++;
+            total_edges++;
         }
     }
+
+public:
+
     
+    
+    //adiciona dois vértices e uma aresta que liga do from para o to
     void insert_edge(const T& hop_from, const T& hop_to) {
         if (graph.find(hop_from) || graph.find(hop_to))
         insert_node(hop_from);
         insert_node(hop_to);
         insert_link(hop_from, hop_to);
-        total_edges++;
     }
 
     int vertex_count() {
