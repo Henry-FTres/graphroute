@@ -86,35 +86,51 @@ int main(int argc, char* argv[]) {
         opcao = menu();
 
 
-
-
-       
-       
+        
+        
     switch (opcao) {
-        case 1:
+        case 1: {
+            
             graph.show();
             break;
-        case 2:
-            //TODO encontrar_menor_caminho();
+        }
+        case 2: {
+
+            string start;
+            string end;
+
+            cout << "Início: ";
+            getline(cin, start);
+            cout << "Fim: ";
+            getline(cin, end);
+            auto path = graph.shortest_path(start, end);
+
+            for (int i = 0; i < path.size(); i++) {
+
+                if (i > 0) cout << " -> ";
+                cout << path[i]->value;
+            }
+            cout << "\n";
             break;
-        case 3:
+        }
+        case 3: {
+
             //TODO calcular_diametro_grafo();
             break;
-        case 4:
+        }
+        case 4: {
+            
             //TODO identificar_roteadores_criticos();
             break;
+        }
         case 0:
+
             break;
     }
     } while (opcao != 0);
-   
-   
-   
-
-
-
-
-
+    
+    
+    
 
     arq.close();
 
