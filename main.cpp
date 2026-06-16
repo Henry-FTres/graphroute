@@ -44,7 +44,7 @@ int menu(){
 
 
 int main(int argc, char* argv[]) {
-    graph::Graphroute<string> graph; //conflito com o namespace
+    graph::GraphRoute<string> graph; //conflito com o namespace
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
         return 1;
