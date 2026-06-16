@@ -57,7 +57,6 @@ public:
     
     //adiciona dois vértices e uma aresta que liga do from para o to
     void insert_edge(const T& hop_from, const T& hop_to) {
-        if (graph.find(hop_from) || graph.find(hop_to))
         insert_node(hop_from);
         insert_node(hop_to);
         insert_link(hop_from, hop_to);
