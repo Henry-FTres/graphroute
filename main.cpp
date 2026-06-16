@@ -4,19 +4,23 @@
 #include <sstream>
 #include "graphroute.cpp"
 
+
 using namespace std;
+
 
 vector<string> split(const string& line, char sep){
 
+
     vector<string> parts;
     stringstream stream(line); //como um buffer que pode ler pedaço por pedaço
-    
+   
     string aux;
     while (getline(stream, aux, sep)){ //lê do stream até encontrar uma vírgula, guarda em aux, e adiciona no vetor. Ele repete até acabar a linha.
         parts.push_back(aux);
     }
     return parts;
 }
+
 
 int menu(){
     int opcao;
@@ -38,40 +42,57 @@ int menu(){
     }
 }
 
+
 int main(int argc, char* argv[]) {
-    graph::Graphroute<string> grafo; 
+    graph::Graphroute<string> graph; //conflito com o namespace
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
         return 1;
     }
 
+
     ifstream arq(argv[1]);
+
 
     if(!arq.is_open()) {
         cerr << "Erro ao abrir arquivo. Passe um caminho válido!" << "\n";
         return 1;
     }
 
+
     string auxiliar;
-    getline(arq,auxiliar);
+    getline(arq,auxiliar); //para descartar a linha de cabeçalho
     while(getline(arq, auxiliar)){
         auto fields = split(auxiliar, ',');
+        if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
+            continue;
+        }
+        else{
+            graph.insert_edge(fields[4], fields[5]);
+        }
     }
+
 
     cout << "Grafo de roteamento inicializado" << "\n"
          << "Vértices únicos (IPs): "
-         //<< todo count_vertices()
+         << graph.vertex_count()
          << " | Arestas: "
-         //<< todo count_edges()
+         << graph.edge_count()
          << "\n";
+
 
     int opcao;
     do {
         opcao = menu();
 
-        switch (opcao) {
+
+
+
+       
+       
+    switch (opcao) {
         case 1:
-            grafo.show();
+            graph.show();
             break;
         case 2:
             //TODO encontrar_menor_caminho();
@@ -84,8 +105,12 @@ int main(int argc, char* argv[]) {
             break;
         case 0:
             break;
-        }
+    }
     } while (opcao != 0);
+   
+   
+   
+
 
 
 
@@ -93,6 +118,8 @@ int main(int argc, char* argv[]) {
 
     arq.close();
 
+
     return 0;
+
 
 }
