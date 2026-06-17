@@ -81,7 +81,7 @@ int submenu() {
  
  
 int main(int argc, char* argv[]) {
-    graph::GraphRoute<string> graph; //conflito com o namespace
+    graph::GraphRoute<string> grafo; //conflito com o namespace
    
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
@@ -106,16 +106,16 @@ int main(int argc, char* argv[]) {
             continue;
         }
         else{
-            graph.insert_edge(fields[4], fields[5]);
+            grafo.insert_edge(fields[4], fields[5]);
         }
     }
  
  
     cout << "Grafo de roteamento inicializado" << "\n"
          << "Vértices únicos (IPs): "
-         << graph.vertex_count()
+         << grafo.vertex_count()
          << " | Arestas: "
-         << graph.edge_count()
+         << grafo.edge_count()
          << "\n";
  
  
@@ -133,17 +133,17 @@ int main(int argc, char* argv[]) {
             switch (opcSubmenu) {
                 case 1:
  
-                    graph.showScreen();
+                    grafo.showScreen();
                     break;
                
                 case 2:
  
-                    graph.showPng(argv[1]);
+                    grafo.showPng(argv[1]);
                     break;
  
                 case 3:
  
-                    graph.showDoc(argv[1]);
+                    grafo.showDoc(argv[1]);
                     break;
  
                 default:
@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
             getline(cin, start);
             cout << "Fim: ";
             getline(cin, end);
-            auto path = graph.shortest_path(start, end);
+            auto path = grafo.shortest_path(start, end);
  
             for (int i = 0; i < path.size(); i++) {
  

@@ -19,6 +19,7 @@ private:
  
  
     std::unordered_map<T, node> graph;
+
     std::unordered_map<T, int> inDegrees;
     int total_edges = 0;
  
@@ -50,7 +51,7 @@ private:
             return;
  
  
-        if(pfrom->links.count(pto)==0){
+        if(pfrom->links.count(pto)==0){ //poderia ter verificado com o próprio insert pois ele retorna um std::pair<iterator,bool>, esse bool diz se inseriu ou se já tinha. Ficaria: if (pfrom->links.insert(pto).second) e incrementa os outros 2 dentro do if
             pfrom->links.insert(pto);
             inDegrees[pto->value]++;
             total_edges++;
@@ -72,18 +73,11 @@ private:
     }
  
 public:
- 
- 
-   
-   
+
     //adiciona dois vértices e uma aresta que liga do from para o to
-    void insert_edge(const T& hop_from, const T& hop_to) { //ver se está certo
-        if (graph.find(hop_from) == graph.end()) {
-            insert_node(hop_from);
-        }
-        if (graph.find(hop_to) == graph.end()) {
-            insert_node(hop_to);
-        }
+    void insert_edge(const T& hop_from, const T& hop_to) { 
+        insert_node(hop_from);
+        insert_node(hop_to);
         insert_link(hop_from, hop_to);
     }
  
