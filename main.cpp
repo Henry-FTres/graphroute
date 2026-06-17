@@ -21,7 +21,26 @@ vector<string> split(const string& line, char sep){
     return parts;
 }
 
+void path(graph::GraphRoute<string>& rede)
+{
 
+    string start, end;
+    cout << "Inicial: ";
+    getline(cin, start);
+    cout << "Final: ";
+    getline(cin, end);
+
+    auto path = rede.shortest_path(start, end);
+    if (path.empty()) {
+        std::cout << "Nenhum caminho encontrado\n";
+    } else {
+        for (auto p : path)
+            std::cout << p->value << " ";
+
+        std::cout << "\n";
+    }
+}
+ 
 int menu(){
     int opcao;
     while (true) {
