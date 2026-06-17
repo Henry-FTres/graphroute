@@ -9,8 +9,7 @@ using namespace std;
  
  
 vector<string> split(const string& line, char sep){
- 
- 
+
     vector<string> parts;
     stringstream stream(line); //como um buffer que pode ler pedaço por pedaço
    
@@ -102,7 +101,11 @@ int main(int argc, char* argv[]) {
     getline(arq,auxiliar); //para descartar a linha de cabeçalho
     while(getline(arq, auxiliar)){
         auto fields = split(auxiliar, ',');
-        if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
+
+        if(fields.size() < 6){
+            continue;
+        }
+        else if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
             continue;
         }
         else{
