@@ -34,6 +34,7 @@ void path(graph::GraphRoute<string>& rede)
     if (path.empty()) {
         std::cout << "Nenhum caminho encontrado\n";
     } else {
+        cout << "Caminho encontrado (" << path.size() << " saltos):\n";
         for (auto p : path)
             std::cout << p->value << " ";
 
@@ -155,23 +156,7 @@ int main(int argc, char* argv[]) {
         case 2: {
            
             // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
- 
-            string start;
-            string end;
- 
-            cout << "Início: ";
-            getline(cin, start);
-            cout << "Fim: ";
-            getline(cin, end);
-            auto path = graph.shortest_path(start, end);
- 
-            for (int i = 0; i < path.size(); i++) {
- 
-                if (i > 0) cout << " -> ";
-                cout << path[i]->value;
-            }
-            cout << "\n";
-            break;
+            path(graph);
         }
         case 3: {
  
