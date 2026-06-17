@@ -158,6 +158,53 @@ public:
  
         return path;
     }
+
+    std::vector<node *> diameter()
+    {
+        std::vector<node *> path;
+ 
+        auto pstart = find(start);
+        if (!pstart)
+            return path;
+ 
+        auto pend = find(end);
+        if (!pend)
+            return path;
+ 
+        std::queue<node*> queue;
+        std::unordered_set<node*> queued;
+        std::unordered_map<node*, node*> origin;
+        queue.push(pstart);
+        queued.insert(pstart);
+        origin[pstart] = nullptr;
+        bool found = false;
+ 
+        while (!queue.empty()) {
+            auto current = queue.front();
+            queue.pop();
+            if (current == pend){
+                found = true;
+                break;
+            }
+            for (auto adj : current->links) {
+                if (queued.count(adj) == 0) {
+                    queue.push(adj);
+                    queued.insert(adj);
+                    origin[adj] = current;
+                }
+            }            
+        }
+        if(found) {
+            auto p = pend;
+            while(p){
+                path.push_back(p);
+                p = origin[p];
+            }
+        }
+        std::reverse(path.begin(), path.end());
+ 
+        return path;
+    }
  
 };
 }
