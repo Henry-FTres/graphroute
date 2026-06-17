@@ -3,14 +3,14 @@
 #include <vector>
 #include <sstream>
 #include "graphroute.cpp"
-
-
+ 
+ 
 using namespace std;
-
-
+ 
+ 
 vector<string> split(const string& line, char sep){
-
-
+ 
+ 
     vector<string> parts;
     stringstream stream(line); //como um buffer que pode ler pedaço por pedaço
    
@@ -60,25 +60,44 @@ int menu(){
         cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
     }
 }
-
-
+ 
+int submenu() {
+    int opcao;
+    while (true) {
+        cout << "================================================================\n"
+             << "1. Tela.\n"
+             << "2. Imagem (PNG).\n"
+             << "3. Documento (PDF).\n"
+             << "================================================================\n"
+             << "Escolha uma opção: ";
+        cin >> opcao;
+        cin.ignore();
+        if (opcao == 1 || opcao == 2 || opcao == 3) {
+            return opcao;
+        }
+        cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
+    }
+}
+ 
+ 
 int main(int argc, char* argv[]) {
     graph::GraphRoute<string> graph; //conflito com o namespace
+   
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
         return 1;
     }
-
-
+ 
+ 
     ifstream arq(argv[1]);
-
-
+ 
+ 
     if(!arq.is_open()) {
         cerr << "Erro ao abrir arquivo. Passe um caminho válido!" << "\n";
         return 1;
     }
-
-
+ 
+ 
     string auxiliar;
     getline(arq,auxiliar); //para descartar a linha de cabeçalho
     while(getline(arq, auxiliar)){
@@ -90,42 +109,64 @@ int main(int argc, char* argv[]) {
             graph.insert_edge(fields[4], fields[5]);
         }
     }
-
-
+ 
+ 
     cout << "Grafo de roteamento inicializado" << "\n"
          << "Vértices únicos (IPs): "
          << graph.vertex_count()
          << " | Arestas: "
          << graph.edge_count()
          << "\n";
-
-
+ 
+ 
     int opcao;
+    int opcSubmenu;
     do {
         opcao = menu();
-
-
-        
-        
+ 
+       
+       
     switch (opcao) {
         case 1: {
-            
-            graph.show();
+           
+            opcSubmenu = submenu();
+            switch (opcSubmenu) {
+                case 1:
+ 
+                    graph.showScreen();
+                    break;
+               
+                case 2:
+ 
+                    graph.showPng(argv[1]);
+                    break;
+ 
+                case 3:
+ 
+                    graph.showDoc(argv[1]);
+                    break;
+ 
+                default:
+                    break;
+                }
             break;
         }
+ 
         case 2: {
-
+           
+            // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
+ 
             string start;
             string end;
-
+ 
             cout << "Início: ";
             getline(cin, start);
             cout << "Fim: ";
             getline(cin, end);
             auto path = graph.shortest_path(start, end);
-
+ 
             for (int i = 0; i < path.size(); i++) {
-
+ 
                 if (i > 0) cout << " -> ";
                 cout << path[i]->value;
             }
@@ -133,28 +174,28 @@ int main(int argc, char* argv[]) {
             break;
         }
         case 3: {
-
+ 
             //TODO calcular_diametro_grafo();
             break;
         }
         case 4: {
-            
+           
             //TODO identificar_roteadores_criticos();
             break;
         }
         case 0:
-
+ 
             break;
     }
     } while (opcao != 0);
-    
-    
-    
-
+   
+   
+   
+ 
     arq.close();
-
-
+ 
+ 
     return 0;
-
-
+ 
+ 
 }
