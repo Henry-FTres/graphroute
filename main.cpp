@@ -85,6 +85,7 @@ void path(graph::GraphRoute<string>& grafo)
             std::cout << p->value << "->";
 
         std::cout << "\n";
+        std::cout << "Número de saltos: " << path.size() - 1 << "\n"; //o número de saltos é o número de nós - 1, porque o caminho inclui o nó de origem.
     }
 }
  
