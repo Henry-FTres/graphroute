@@ -21,6 +21,7 @@ private:
     std::unordered_map<T, node> graph;
 
     std::unordered_map<T, int> inDegrees;
+
     int total_edges = 0;
  
  
@@ -59,10 +60,10 @@ private:
     }
  
     void gerar_dot() {
-        std::ofstream dot("/tmp/graphviz.dot");
+        std::ofstream dot("/tmp/graphviz.dot");//abre um arquivo ou cria se não existir
         dot << "digraph{\n";
         for (const auto& [key, node] : graph) {
-            dot << "\t\"" << key << "\" -> {";
+            dot << "\t\"" << key << "\" -> {"; //"A" -> {
             for (const auto& link : node.links) {
                 dot << "\"" << link->value << "\" ";
             }
@@ -84,12 +85,14 @@ public:
     int vertex_count() {
         return graph.size();
     }
- 
-   
+
+    int edge_count() {
+        return total_edges;
+    }
  
     void showScreen() {
         gerar_dot();
-        system("dot -Tx11 /tmp/graphviz.dot");
+        system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
     }
  
     void showPng(string current_path) {
@@ -105,15 +108,11 @@ public:
         command += current_path;
         command += ".pdf";
         gerar_dot();
-        system(command.c_str());
+        system(command.c_str()); //c_str converte a string C++ para o formato que system() aceita.
     }
- 
-    int edge_count() {
-        return total_edges;
-    }
- 
-    std::vector<node *> shortest_path(const T& start, const T& end)
-    {
+   
+
+    std::vector<node *> shortest_path(const T& start, const T& end){
         std::vector<node *> path;
  
         auto pstart = find(start);
@@ -159,8 +158,7 @@ public:
         return path;
     }
 
-    std::vector<node *> diameter()
-    {
+    std::vector<node *> diameter(){
         std::vector<node *> path;
  
         auto pstart = find(start);
@@ -171,9 +169,9 @@ public:
         if (!pend)
             return path;
  
-        std::queue<node*> queue;
-        std::unordered_set<node*> queued;
-        std::unordered_map<node*, node*> origin;
+        std::queue<node*> queue; //precisam ser visitados
+        std::unordered_set<node*> queued; //já foram visitados
+        std::unordered_map<node*, node*> origin; //origem, quem levou até cada nó
         queue.push(pstart);
         queued.insert(pstart);
         origin[pstart] = nullptr;
@@ -186,7 +184,7 @@ public:
                 found = true;
                 break;
             }
-            for (auto adj : current->links) {
+            for (auto adj : current->links) { //percorre as conexões
                 if (queued.count(adj) == 0) {
                     queue.push(adj);
                     queued.insert(adj);

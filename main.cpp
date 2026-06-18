@@ -20,7 +20,7 @@ vector<string> split(const string& line, char sep){
     return parts;
 }
 
-void path(graph::GraphRoute<string>& rede)
+void path(graph::GraphRoute<string>& grafo)
 {
 
     string start, end;
@@ -29,13 +29,13 @@ void path(graph::GraphRoute<string>& rede)
     cout << "Final: ";
     getline(cin, end);
 
-    auto path = rede.shortest_path(start, end);
+    auto path = grafo.shortest_path(start, end);
     if (path.empty()) {
-        std::cout << "Nenhum caminho encontrado\n";
+        std::cout << "Nenhum caminho encontrado!\n";
     } else {
         cout << "Caminho encontrado (" << path.size() << " saltos):\n";
         for (auto p : path)
-            std::cout << p->value << " ";
+            std::cout << p->value << "->";
 
         std::cout << "\n";
     }
@@ -57,7 +57,13 @@ int menu(){
         if (opcao == 1 || opcao == 2 || opcao == 3 || opcao == 4 || opcao == 0) {
             return opcao;
         }
-        cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
+        cout << "\x1b["          // Início do código ANSI
+            << "1;"             // Negrito
+            << "38;5;221;"      // Cor do texto
+            << "48;5;88m"       // Cor do fundo
+            << "Opção inválida. Tente novamente."
+            << "\x1b[0m"        // Resetar formatação
+            << "\n";
     }
 }
  
@@ -81,7 +87,7 @@ int submenu() {
  
  
 int main(int argc, char* argv[]) {
-    graph::GraphRoute<string> grafo; //conflito com o namespace
+    graph::GraphRoute<string> grafo; 
    
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
@@ -115,7 +121,7 @@ int main(int argc, char* argv[]) {
     }
  
  
-    cout << "Grafo de roteamento inicializado" << "\n"
+    cout << "Grafo de roteamento inicializado\n" 
          << "Vértices únicos (IPs): "
          << grafo.vertex_count()
          << " | Arestas: "
@@ -128,8 +134,6 @@ int main(int argc, char* argv[]) {
     do {
         opcao = menu();
  
-       
-       
     switch (opcao) {
         case 1: {
            
