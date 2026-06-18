@@ -20,27 +20,7 @@ vector<string> split(const string& line, char sep){
     return parts;
 }
 
-void path(graph::GraphRoute<string>& grafo)
-{
 
-    string start, end;
-    cout << "Inicial: ";
-    getline(cin, start);
-    cout << "Final: ";
-    getline(cin, end);
-
-    auto path = grafo.shortest_path(start, end);
-    if (path.empty()) {
-        std::cout << "Nenhum caminho encontrado!\n";
-    } else {
-        cout << "Caminho encontrado (" << path.size() << " saltos):\n";
-        for (auto p : path)
-            std::cout << p->value << "->";
-
-        std::cout << "\n";
-    }
-}
- 
 int menu(){
     int opcao;
     while (true) {
@@ -66,7 +46,8 @@ int menu(){
             << "\n";
     }
 }
- 
+
+
 int submenu() {
     int opcao;
     while (true) {
@@ -84,6 +65,30 @@ int submenu() {
         cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
     }
 }
+
+
+void path(graph::GraphRoute<string>& grafo)
+{
+
+    string start, end;
+    cout << "IP de origem: ";
+    getline(cin, start);
+    cout << "IP de destino: ";
+    getline(cin, end);
+
+    auto path = grafo.shortest_path(start, end);
+    if (path.empty()) {
+        std::cout << "Nenhum caminho encontrado!\n";
+    } else {
+        cout << "Caminho encontrado (" << path.size() << " saltos):\n";
+        for (auto p : path)
+            std::cout << p->value << "->";
+
+        std::cout << "\n";
+    }
+}
+ 
+ 
  
  
 int main(int argc, char* argv[]) {
@@ -109,7 +114,7 @@ int main(int argc, char* argv[]) {
     while(getline(arq, auxiliar)){
         auto fields = split(auxiliar, ',');
 
-        if(fields.size() < 6){
+        if(fields.size() < 6){ 
             continue;
         }
         else if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
@@ -127,7 +132,20 @@ int main(int argc, char* argv[]) {
          << " | Arestas: "
          << grafo.edge_count()
          << "\n";
- 
+
+    //SEPARANDO O NOME DO ARQUIVO DO PATH
+    string nome_arquivo = argv[1];
+
+    // remove o caminho (tudo antes da última '/')
+    size_t pos_barra = nome_arquivo.find_last_of('/'); //size t guarda um tamanho, nesse caso vai gauardar a posição da última barra. Se não encontrar, retorna npos, que é um valor especial.
+    if (pos_barra != string::npos) //se encontrou a barra, ou seja, se pos_barra não é npos
+        nome_arquivo = nome_arquivo.substr(pos_barra + 1); //substr retorna uma substring, nesse caso a partir da posição da última barra + 1 (para não incluir a barra) até o final da string.
+
+    // remove a extensão (tudo depois do último '.')
+    size_t pos_ponto = nome_arquivo.find_last_of('.');
+    if (pos_ponto != string::npos)
+        nome_arquivo = nome_arquivo.substr(0, pos_ponto); //substr nesse caso retorna a substring do início da string até a posição do último ponto (sem incluir o ponto).
+    
  
     int opcao;
     int opcSubmenu;
@@ -146,12 +164,12 @@ int main(int argc, char* argv[]) {
                
                 case 2:
  
-                    grafo.showPng(argv[1]);
+                    grafo.showPng(nome_arquivo);
                     break;
  
                 case 3:
  
-                    grafo.showDoc(argv[1]);
+                    grafo.showDoc(nome_arquivo);
                     break;
  
                 default:
@@ -164,6 +182,7 @@ int main(int argc, char* argv[]) {
            
             // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
             path(grafo);
+            break;
         }
         case 3: {
  
@@ -191,3 +210,20 @@ int main(int argc, char* argv[]) {
  
  
 }
+
+
+/*
+TO DO:
+
+-VERIFICAR QUANTOS CAMPOS SÃO
+- VER SE PRECISA TRANSFORMAR O NOME DO ARQUIVO EM MAIÚSCULO (transform(nome_arquivo.begin(), nome_arquivo.end(), nome_arquivo.begin(), ::tolower); E INCLUIR ALGORITHM)
+
+
+
+
+
+
+
+
+
+*/
