@@ -9,8 +9,7 @@ using namespace std;
  
  
 vector<string> split(const string& line, char sep){
- 
- 
+
     vector<string> parts;
     stringstream stream(line); //como um buffer que pode ler pedaço por pedaço
    
@@ -82,7 +81,7 @@ int submenu() {
  
  
 int main(int argc, char* argv[]) {
-    graph::GraphRoute<string> graph; //conflito com o namespace
+    graph::GraphRoute<string> grafo; //conflito com o namespace
    
     if (argc != 2) {
         cerr << "Quantidade incorreta de argumentos! Esperado: 2" << "\n";
@@ -103,20 +102,24 @@ int main(int argc, char* argv[]) {
     getline(arq,auxiliar); //para descartar a linha de cabeçalho
     while(getline(arq, auxiliar)){
         auto fields = split(auxiliar, ',');
-        if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
+
+        if(fields.size() < 6){
+            continue;
+        }
+        else if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
             continue;
         }
         else{
-            graph.insert_edge(fields[4], fields[5]);
+            grafo.insert_edge(fields[4], fields[5]);
         }
     }
  
  
     cout << "Grafo de roteamento inicializado" << "\n"
          << "Vértices únicos (IPs): "
-         << graph.vertex_count()
+         << grafo.vertex_count()
          << " | Arestas: "
-         << graph.edge_count()
+         << grafo.edge_count()
          << "\n";
  
  
@@ -134,17 +137,17 @@ int main(int argc, char* argv[]) {
             switch (opcSubmenu) {
                 case 1:
  
-                    graph.showScreen();
+                    grafo.showScreen();
                     break;
                
                 case 2:
  
-                    graph.showPng(argv[1]);
+                    grafo.showPng(argv[1]);
                     break;
  
                 case 3:
  
-                    graph.showDoc(argv[1]);
+                    grafo.showDoc(argv[1]);
                     break;
  
                 default:
@@ -156,7 +159,7 @@ int main(int argc, char* argv[]) {
         case 2: {
            
             // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
-            path(graph);
+            path(grafo);
         }
         case 3: {
  
