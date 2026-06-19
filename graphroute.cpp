@@ -54,6 +54,7 @@ private:
             pfrom->links.insert(pto);
             inDegrees[pto->value]++;
             total_edges++;
+
         }
     }
  
@@ -173,33 +174,32 @@ public:
         if (!pstart)
             return path;
  
-        auto pend = find(end);
-        if (!pend)
-            return path;
- 
         std::queue<node*> queue;
         std::unordered_set<node*> queued;
-        std::unordered_map<node*, node*> origin;
+        std::unordered_map<node*, int> distance;
         queue.push(pstart);
         queued.insert(pstart);
-        origin[pstart] = nullptr;
+        distance[pstart] = 0;
         bool found = false;
  
         while (!queue.empty()) {
             auto current = queue.front();
             queue.pop();
-            if (current == pend){
-                found = true;
-                break;
-            }
+            
             for (auto adj : current->links) {
                 if (queued.count(adj) == 0) {
                     queue.push(adj);
                     queued.insert(adj);
-                    origin[adj] = current;
+                    distance[adj] = ++distance[current];
                 }
             }            
         }
+
+        node* highest_distance;
+        for (const auto& [key, node] : graph) {
+            if 
+        }   
+
         if(found) {
             auto p = pend;
             while(p){

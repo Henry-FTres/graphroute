@@ -164,7 +164,7 @@ int main(int argc, char* argv[]) {
             break;
         }
         case 4: {
-           
+            
             //TODO identificar_roteadores_criticos();
             break;
         }
