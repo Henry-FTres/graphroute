@@ -144,7 +144,7 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
     }
  
-    void showPng(string nome_arquivo) {
+    void showPng(string nome_arquivo){ {
         gerar_dot();
         std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
         command += nome_arquivo;
@@ -160,23 +160,25 @@ public:
         system(command.c_str()); //c_str converte a string C++ para o formato que system() aceita.
     }
 
-    void showScreenPath() {
-        gerar_dot_path();
+    void showScreenPath(const std::vector<node*>& caminho) {
+        gerar_dot_path(caminho);
         system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
     }
  
-    void showPngPath(string nome_arquivo) {
-        gerar_dot_path();
+    void showPngPath(string nome_arquivo, const std::vector<node*>& caminho) {
+        gerar_dot_path(caminho);
         std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
         command += nome_arquivo;
+        command += "_path";
         command += ".png";
         system(command.c_str());
     }
  
-    void showDocPath(string nome_arquivo) {
-        gerar_dot_path();
+    void showDocPath(string nome_arquivo, const std::vector<node*>& caminho) {
+        gerar_dot_path(caminho);
         std::string command = "dot -Tpdf /tmp/graphviz.dot -o ";
         command += nome_arquivo;
+        command += "_path";
         command += ".pdf";
         system(command.c_str()); //c_str converte a string C++ para o formato que system() aceita.
     }

@@ -184,21 +184,27 @@ int main(int argc, char* argv[]) {
         case 2: {
            
             auto caminho = path(grafo);
+           
+
+            if (caminho.empty()) {
+                break; // não mostra submenu se não achou caminho
+            }
+
             opcSubmenu = submenu();
             switch (opcSubmenu) {
                 case 1:
  
-                    grafo.showScreenPath();
+                    grafo.showScreenPath(caminho);
                     break;
                
                 case 2:
  
-                    grafo.showPngPath(nome_arquivo);
+                    grafo.showPngPath(nome_arquivo, caminho);
                     break;
  
                 case 3:
  
-                    grafo.showDocPath(nome_arquivo);
+                    grafo.showDocPath(nome_arquivo, caminho);
                     break;
  
                 default:
