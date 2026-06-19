@@ -72,7 +72,56 @@ private:
         dot << "}\n";
         dot.close();
     }
- 
+
+        
+    void gerar_dot_path(const auto& caminho){
+
+        //pra verificar rapidamente se o nó faz parte do caminho
+        std::unordered_set<T> nos_caminho;
+        for (auto p : caminho){
+            nos_caminho.insert(p->value);
+        }
+
+        std::unordered_set<std::string> links_caminho;
+        for (int i = 0; i < caminho.size() - 1; i++ ){
+            links_caminho.insert(caminho[i]->value + "->" + caminho[i+1]->value);
+        }
+
+        std::ofstream dot("/tmp/graphviz.dot");//abre um arquivo ou cria se não existir
+        dot << "digraph{\n";
+        for (const auto& [key, node] : graph) {
+
+            if(key == caminho[0]->value){ //value porque os ítens são nodes
+                dot << "\t\"" << key << "\" [style=filled, fillcolor= \"#1a5c1a\", fontcolor=white];\n";
+            }
+
+             else if(key == caminho.back()->value){
+                 dot << "\t\"" << key << "\" [style=filled, fillcolor=\"#cc0000\", fontcolor=white];\n";
+            }
+
+            else if(nos_caminho.count(key)!=0){
+                dot << "\t\"" << key << "\" [style=filled, fillcolor=\"#4CAF50\", fontcolor=white];\n";
+            }
+           
+            else{
+                dot << "\t\"" << key << "\";\n";
+            }
+
+            for (const auto& link : node.links) {
+
+                if(links_caminho.count(key + "->" + link->value) != 0){
+                    dot << "\t\"" << key << "\" -> \"" << link->value << "\" [color=red, penwidth=2];\n";
+                }
+                else{
+                    dot << "\t\"" << key << "\" -> \"" << link->value << "\";\n";
+                }
+            }
+        }
+        dot << "}\n";
+        dot.close();
+    }
+
+
 public:
 
     //adiciona dois vértices e uma aresta que liga do from para o to
@@ -105,6 +154,27 @@ public:
  
     void showDoc(string nome_arquivo) {
         gerar_dot();
+        std::string command = "dot -Tpdf /tmp/graphviz.dot -o ";
+        command += nome_arquivo;
+        command += ".pdf";
+        system(command.c_str()); //c_str converte a string C++ para o formato que system() aceita.
+    }
+
+    void showScreenPath() {
+        gerar_dot_path();
+        system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
+    }
+ 
+    void showPngPath(string nome_arquivo) {
+        gerar_dot_path();
+        std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
+        command += nome_arquivo;
+        command += ".png";
+        system(command.c_str());
+    }
+ 
+    void showDocPath(string nome_arquivo) {
+        gerar_dot_path();
         std::string command = "dot -Tpdf /tmp/graphviz.dot -o ";
         command += nome_arquivo;
         command += ".pdf";

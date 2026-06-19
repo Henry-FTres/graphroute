@@ -52,6 +52,7 @@ int submenu() {
     int opcao;
     while (true) {
         cout << "================================================================\n"
+             << "Exibir como:\n"
              << "1. Tela.\n"
              << "2. Imagem (PNG).\n"
              << "3. Documento (PDF).\n"
@@ -67,7 +68,7 @@ int submenu() {
 }
 
 
-void path(graph::GraphRoute<string>& grafo)
+auto path(graph::GraphRoute<string>& grafo)
 {
 
     string start, end;
@@ -80,13 +81,14 @@ void path(graph::GraphRoute<string>& grafo)
     if (path.empty()) {
         std::cout << "Nenhum caminho encontrado!\n";
     } else {
-        cout << "Caminho encontrado (" << path.size() << " saltos):\n";
+        cout << "Caminho encontrado!\n";
         for (auto p : path)
             std::cout << p->value << "->";
 
         std::cout << "\n";
         std::cout << "Número de saltos: " << path.size() - 1 << "\n"; //o número de saltos é o número de nós - 1, porque o caminho inclui o nó de origem.
     }
+    return path;
 }
  
  
@@ -181,8 +183,27 @@ int main(int argc, char* argv[]) {
  
         case 2: {
            
-            // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
-            path(grafo);
+            auto caminho = path(grafo);
+            opcSubmenu = submenu();
+            switch (opcSubmenu) {
+                case 1:
+ 
+                    grafo.showScreenPath();
+                    break;
+               
+                case 2:
+ 
+                    grafo.showPngPath(nome_arquivo);
+                    break;
+ 
+                case 3:
+ 
+                    grafo.showDocPath(nome_arquivo);
+                    break;
+ 
+                default:
+                    break;
+                }
             break;
         }
         case 3: {
@@ -216,7 +237,7 @@ int main(int argc, char* argv[]) {
 /*
 TO DO:
 
--VERIFICAR QUANTOS CAMPOS SÃO
+- VERIFICAR QUANTOS CAMPOS SÃO
 - VER SE PRECISA TRANSFORMAR O NOME DO ARQUIVO EM MAIÚSCULO (transform(nome_arquivo.begin(), nome_arquivo.end(), nome_arquivo.begin(), ::tolower); E INCLUIR ALGORITHM)
 
 
@@ -228,3 +249,5 @@ TO DO:
 
 
 */
+
+
