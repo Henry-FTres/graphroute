@@ -214,11 +214,11 @@ int main(int argc, char* argv[]) {
         }
         case 3: {
  
-            //TODO calcular_diametro_grafo();
+            grafo.diameter();
             break;
         }
         case 4: {
-           
+            
             //TODO identificar_roteadores_criticos();
             break;
         }
