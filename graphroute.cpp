@@ -144,7 +144,7 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
     }
  
-    void showPng(string nome_arquivo){ {
+    void showPng(string nome_arquivo){ 
         gerar_dot();
         std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
         command += nome_arquivo;
@@ -278,5 +278,3 @@ public:
  
 };
 }
- 
- 
