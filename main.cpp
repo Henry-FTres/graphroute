@@ -157,9 +157,30 @@ int main(int argc, char* argv[]) {
         }
  
         case 2: {
-           
-            // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
+            
             path(grafo);
+            opcSubmenu = submenu();
+            switch (opcSubmenu) {
+                case 1:
+ 
+                    grafo.showScreen();
+                    break;
+               
+                case 2:
+ 
+                    grafo.showPng(argv[1]);
+                    break;
+ 
+                case 3:
+ 
+                    grafo.showDoc(argv[1]);
+                    break;
+ 
+                default:
+                    break;
+                }
+            break;
+            // TODO implementar submenu(), com as opções de mostrar o menor caminho em .dot, em pdf e em png, destacando o shortest path com colorido ****LER PONTO 2 MENU INTERATIVO NO DOC DO TRABALHO QUE O BRUSSO PASSOU
         }
         case 3: {
  
