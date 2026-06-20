@@ -115,8 +115,10 @@ public:
  
     std::vector<node *> shortest_path(const T& start, const T& end)
     {
+        // define vector path
         std::vector<node *> path;
  
+        // verifica se ip start e end existem no grafo, caso contrario retorna path vazio.
         auto pstart = find(start);
         if (!pstart)
             return path;
@@ -124,89 +126,107 @@ public:
         auto pend = find(end);
         if (!pend)
             return path;
- 
+        
+        // define fila de nós para serem visitados
         std::queue<node*> queue;
-        std::unordered_set<node*> queued;
+        // define set de visitados, pra não processar e visitar mesmo node
+        std::unordered_set<node*> visited;
+        // define map de origem. Pra cada node, guarda de onde ele veio, qual node descobriu este. Pra reconstruir o caminho depois
         std::unordered_map<node*, node*> origin;
+        // bota pstart na fila e 
         queue.push(pstart);
-        queued.insert(pstart);
+        //marca ele como visitado 
+        visited.insert(pstart);
+        // dizendo que sua origem é nula
         origin[pstart] = nullptr;
         bool found = false;
  
+        // enquanto a fila não estiver vazia
         while (!queue.empty()) {
+            // define current como o nó em frente na fila e remove da fila
             auto current = queue.front();
             queue.pop();
+            // se current for end (destino), marca encontrou como true e sai do loop pra nao procurar mais.
             if (current == pend){
                 found = true;
                 break;
             }
+            // caso contrario, verifica os links de current (node na frente da fila).
             for (auto adj : current->links) {
-                if (queued.count(adj) == 0) {
+                // pra cada link que ainda não foi visitado (enfileirado)
+                if (visited.count(adj) == 0) {
                     queue.push(adj);
-                    queued.insert(adj);
+                    visited.insert(adj);
+                    // registra a origem de cada link adjacente não visitado igual ao current (nodo que estamos lidando agora)
                     origin[adj] = current;
                 }
             }            
         }
+        // se encontrou for true
         if(found) {
+            // define p como pEnd (nodo destino)
             auto p = pend;
+            // enquanto p não for nulo
             while(p){
+                // dá push back no vector para reconstruir o caminho
                 path.push_back(p);
+                // e define p como a origem dele mesmo, e repete o while até que origin[p] seja nulo, ou seja, seja pStart
                 p = origin[p];
             }
         }
+        // inverte o caminho porque ele foi reconstruido de tras pra frente
         std::reverse(path.begin(), path.end());
  
         return path;
     }
 
-    std::vector<node *> diameter()
-    {
-        std::vector<node *> path;
- 
-        auto pstart = find(start);
-        if (!pstart)
-            return path;
- 
+    int highest_distance(node* pstart) {
+
         std::queue<node*> queue;
-        std::unordered_set<node*> queued;
+        std::unordered_set<node*> visited;
         std::unordered_map<node*, int> distance;
         queue.push(pstart);
-        queued.insert(pstart);
+        visited.insert(pstart);
         distance[pstart] = 0;
-        bool found = false;
  
         while (!queue.empty()) {
             auto current = queue.front();
             queue.pop();
             
+            int current_distance = distance[current];
             for (auto adj : current->links) {
-                if (queued.count(adj) == 0) {
+                if (visited.count(adj) == 0) {
                     queue.push(adj);
-                    queued.insert(adj);
-                    distance[adj] = ++distance[current];
+                    visited.insert(adj);
+                    distance[adj] = current_distance + 1; // se fosse ++. modificaria o valor original no mapa
                 }
             }            
         }
-
-        node* highest_distance;
-        for (const auto& [key, node] : graph) {
-            if 
-        }   
-
-        if(found) {
-            auto p = pend;
-            while(p){
-                path.push_back(p);
-                p = origin[p];
+        
+        int highest_hops = 0;
+        for (auto& [key, max_hops] : distance) {
+            if (max_hops > highest_hops) {
+                highest_hops = max_hops;
             }
         }
-        std::reverse(path.begin(), path.end());
- 
-        return path;
+        return highest_hops;
     }
- 
+
+    int diameter() {
+
+        int result = 0;
+        for (auto& [key, node] : graph) {
+            auto p = &node;
+            int max_distance = highest_distance(p);
+            if (max_distance > result) {
+                result = max_distance;
+            }
+        }
+
+        return result;
+    }
+    
 };
-}
+}   
  
  
