@@ -3,6 +3,8 @@
 #include <fstream>
 #include <queue>
 #include <vector>
+#include <algorithm>
+#include <string>
  
 namespace graph {
  
@@ -145,7 +147,7 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
     }
  
-    void showPng(string nome_arquivo){ 
+    void showPng(std::string nome_arquivo){
         gerar_dot();
         std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
         command += nome_arquivo;
@@ -153,7 +155,7 @@ public:
         system(command.c_str());
     }
  
-    void showDoc(string nome_arquivo) {
+    void showDoc(std::string nome_arquivo) {
         gerar_dot();
         std::string command = "dot -Tpdf /tmp/graphviz.dot -o ";
         command += nome_arquivo;
@@ -166,7 +168,7 @@ public:
         system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
     }
  
-    void showPngPath(string nome_arquivo, const std::vector<node*>& caminho) {
+    void showPngPath(std::string nome_arquivo, const std::vector<node*>& caminho) {
         gerar_dot_path(caminho);
         std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
         command += nome_arquivo;
@@ -175,7 +177,7 @@ public:
         system(command.c_str());
     }
  
-    void showDocPath(string nome_arquivo, const std::vector<node*>& caminho) {
+    void showDocPath(std::string nome_arquivo, const std::vector<node*>& caminho) {
         gerar_dot_path(caminho);
         std::string command = "dot -Tpdf /tmp/graphviz.dot -o ";
         command += nome_arquivo;
@@ -295,6 +297,36 @@ public:
 
         return result;
     }
-    
+
+    void critical_routers() {
+
+        if (graph.empty()) {
+            std::cout << "Grafo vazio. Nenhum roteador para analisar.\n";
+            return;
+        }
+
+        // cria o vector de pares (IP + inDegree)
+        std::vector<std::pair<T, int>> vet;
+        vet.reserve(graph.size());
+        // percorre o set de indegree e armazena no vetor
+        for (auto& [key, val] : inDegrees) {
+            vet.push_back({key, val});
+        }
+
+        // quantos nodos vamos exibir, se é 5 ou menos, caso o grafo seja menor que 5
+        const int k = std::min<int>(5, vet.size());
+
+        // função de partial sort até vet.begin + k (5)
+        std::partial_sort(vet.begin(), vet.begin() + k, vet.end(),
+        [](const std::pair<T, int>& a, const std::pair<T, int>& b) {
+            return a.second > b.second;
+        });
+
+        // exibe o top 5 mostrando ip e indegree
+        for (int i = 0; i < k; i++) {
+            std::cout << i << ". " << vet[i].first << " || "<< "In-degree: " << vet[i].second << "\n";
+        }
+    }
+
 };
 }

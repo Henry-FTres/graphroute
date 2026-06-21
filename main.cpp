@@ -219,7 +219,7 @@ int main(int argc, char* argv[]) {
         }
         case 4: {
             
-            //TODO identificar_roteadores_criticos();
+            grafo.critical_routers();
             break;
         }
         case 0:
@@ -227,7 +227,7 @@ int main(int argc, char* argv[]) {
             break;
     }
     } while (opcao != 0);
-   
+
    
    
  
