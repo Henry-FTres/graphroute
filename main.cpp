@@ -52,12 +52,12 @@ int submenu() {
     int opcao;
     while (true) {
         cout << "================================================================\n"
-             << "Exibir como:\n"
+             << "Selecione o formato de saída do Graphviz:\n"
              << "1. Tela.\n"
              << "2. Imagem (PNG).\n"
              << "3. Documento (PDF).\n"
              << "================================================================\n"
-             << "Escolha uma opção: ";
+             << "Opção:";
         cin >> opcao;
         cin.ignore();
         if (opcao == 1 || opcao == 2 || opcao == 3) {
@@ -81,14 +81,13 @@ auto path(graph::GraphRoute<string>& grafo)
     if (path.empty()) {
         std::cout << "Nenhum caminho encontrado!\n";
     } else {
-        cout << "Caminho encontrado!\n";
+        cout << "Caminho encontrado (" << path.size() - 1 << " saltos):\n";//o número de saltos é o número de nós - 1, porque o caminho inclui o nó de origem.
+    }
+    return path;
         for (auto p : path)
             std::cout << p->value << "->";
 
         std::cout << "\n";
-        std::cout << "Número de saltos: " << path.size() - 1 << "\n"; //o número de saltos é o número de nós - 1, porque o caminho inclui o nó de origem.
-    }
-    return path;
 }
  
  
@@ -238,22 +237,5 @@ int main(int argc, char* argv[]) {
  
  
 }
-
-
-/*
-TO DO:
-
-- VERIFICAR QUANTOS CAMPOS SÃO
-- VER SE PRECISA TRANSFORMAR O NOME DO ARQUIVO EM MAIÚSCULO (transform(nome_arquivo.begin(), nome_arquivo.end(), nome_arquivo.begin(), ::tolower); E INCLUIR ALGORITHM)
-
-
-
-
-
-
-
-
-
-*/
 
 

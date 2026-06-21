@@ -17,12 +17,11 @@ private:
     struct node{
         T value;
         std::unordered_set<node*> links;
+        int inDegree = 0;
     };
  
  
     std::unordered_map<T, node> graph;
-
-    std::unordered_map<T, int> inDegrees;
 
     int total_edges = 0;
  
@@ -56,7 +55,7 @@ private:
  
         if(pfrom->links.count(pto)==0){ //poderia ter verificado com o próprio insert pois ele retorna um std::pair<iterator,bool>, esse bool diz se inseriu ou se já tinha. Ficaria: if (pfrom->links.insert(pto).second) e incrementa os outros 2 dentro do if
             pfrom->links.insert(pto);
-            inDegrees[pto->value]++;
+            pto->inDegree++;
             total_edges++;
 
         }
@@ -308,9 +307,9 @@ public:
         // cria o vector de pares (IP + inDegree)
         std::vector<std::pair<T, int>> vet;
         vet.reserve(graph.size());
-        // percorre o set de indegree e armazena no vetor
-        for (auto& [key, val] : inDegrees) {
-            vet.push_back({key, val});
+        // percorre os nós e armazena o grau de entrada no vetor
+        for (auto& [key, node] : graph) {
+            vet.push_back({key, node.inDegree});
         }
 
         // quantos nodos vamos exibir, se é 5 ou menos, caso o grafo seja menor que 5
