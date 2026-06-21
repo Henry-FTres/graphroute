@@ -20,7 +20,7 @@ As funcionalidades disponíveis são: exibição visual do grafo, busca de menor
 
 Para compilar e executar o projeto, é necessário ter:
 
-- Compilador C++ com suporte ao padrão C++17
+- Compilador C++ com suporte ao padrão C++20
 - Graphviz, para gerar e visualizar os grafos
 
 No Linux, o compilador pode ser instalado com:
@@ -53,10 +53,10 @@ Se aparecer a versão instalada, a instalação foi concluída corretamente.
 
 ### Compilação
 
-O projeto usa o padrão C++17, pois o código faz uso de structured bindings, como por exemplo:
+O projeto usa o padrão C++20 porque a função `gerar_dot_path` usa `auto` como tipo de parâmetro:
 
 ```cpp
-for (const auto& [key, node] : graph)
+void gerar_dot_path(const auto& caminho)
 ```
 
 Para compilar:
@@ -130,7 +130,7 @@ A função usa `stringstream` para tratar a linha como um fluxo de entrada. O se
 auto fields = split(auxiliar, ',');
 ```
 
-Assim, cada linha do CSV é dividida em campos e armazenada num `vector<string>` para acesso por posição.
+Assim, cada linha é dividida em campos e armazenada num `vector<string>` para acesso por posição.
 
 ---
 
@@ -139,7 +139,7 @@ Assim, cada linha do CSV é dividida em campos e armazenada num `vector<string>`
 A validação é feita no `main.cpp`, antes de qualquer inserção no grafo:
 
 ```cpp
-if (fields.size() < 7) {
+if (fields.size() < 6) {
     continue;
 }
 else if (fields[5] == "*" || fields[4] == "" || fields[5] == "") {
@@ -190,7 +190,7 @@ As opções 1 e 2 apresentam um submenu de formato de saída:
 
 ```
 ================================================================
-Exibir como:
+Selecione o formato de saída do Graphviz:
 1. Tela.
 2. Imagem (PNG).
 3. Documento (PDF).
@@ -232,12 +232,15 @@ Cada IP é representado como um nó do grafo. A estrutura utilizada foi:
 struct node {
     T value;
     std::unordered_set<node*> links;
+    int inDegree = 0;
 };
 ```
 
 O atributo `value` guarda o endereço IP do nó.
 
 O atributo `links` guarda ponteiros para os nós vizinhos, ou seja, os IPs para os quais este nó aponta.
+
+O atributo `inDegree` guarda o grau de entrada do nó e é incrementado quando uma nova aresta apontando para ele é inserida.
 
 A classe é template em `T`, o que permite usar qualquer tipo como chave. No projeto, `T` é `std::string`.
 
@@ -251,12 +254,7 @@ O grafo é armazenado em um `unordered_map`:
 std::unordered_map<T, node> graph;
 ```
 
-A chave é o endereço IP e o valor é o nó correspondente. Exemplo:
-
-```
-"192.168.0.1" -> node
-"10.0.0.1"    -> node
-```
+A chave é o endereço IP e o valor é o nó correspondente.
 
 Essa estrutura foi usada porque permite encontrar qualquer nó a partir do seu IP em tempo O(1) médio.
 
@@ -276,19 +274,19 @@ O `unordered_set` não permite elementos repetidos. Assim, se a mesma aresta apa
 
 ## RASTREAMENTO DO GRAU DE ENTRADA
 
-O grau de entrada de cada nó (in-degree) é armazenado separadamente num mapa:
+O grau de entrada de cada nó (in-degree) é armazenado diretamente dentro da própria struct `node`:
 
 ```cpp
-std::unordered_map<T, int> inDegrees;
+int inDegree = 0;
 ```
 
-Esse mapa é atualizado incrementalmente a cada chamada de `insert_link`:
+Esse campo é atualizado incrementalmente a cada chamada de `insert_link`:
 
 ```cpp
-inDegrees[pto->value]++;
+pto->inDegree++;
 ```
 
-Manter o in-degree num mapa separado evita recalcular esse valor na hora da consulta, tornando a opção 4 eficiente independentemente do tamanho do grafo.
+Manter o in-degree dentro do próprio nó simplifica a estrutura e evita recalcular esse valor na hora da consulta, tornando a opção 4 eficiente independentemente do tamanho do grafo.
 
 ---
 
@@ -327,7 +325,7 @@ Internamente, `insert_link` verifica se a aresta já existe antes de inserir:
 ```cpp
 if (pfrom->links.count(pto) == 0) {
     pfrom->links.insert(pto);
-    inDegrees[pto->value]++;
+    pto->inDegree++;
     total_edges++;
 }
 ```
@@ -421,12 +419,12 @@ for (auto& [key, node] : graph) {
 
 Os roteadores críticos são identificados pelo grau de entrada (in-degree): quanto mais arestas chegam a um nó, mais central ele é na topologia da rede.
 
-A função `critical_routers` monta um vetor de pares `(IP, in-degree)` a partir do mapa `inDegrees`:
+A função `critical_routers` monta um vetor de pares `(IP, in-degree)` percorrendo o `graph` e lendo o campo `inDegree` de cada nó:
 
 ```cpp
 std::vector<std::pair<T, int>> vet;
-for (auto& [key, val] : inDegrees) {
-    vet.push_back({key, val});
+for (auto& [key, node] : graph) {
+    vet.push_back({key, node.inDegree});
 }
 ```
 
@@ -492,49 +490,6 @@ input_1_path.pdf
 
 Os nomes são derivados automaticamente do nome do arquivo de entrada informado na execução.
 
----
-
-## EXEMPLO DE USO
-
-Compilar:
-
-```bash
-g++ -std=c++17 main.cpp -o graphroute
-```
-
-Executar:
-
-```bash
-./graphroute input_1.log
-```
-
-Saída inicial:
-
-```
-Grafo de roteamento inicializado
-Vértices únicos (IPs): 342 | Arestas: 812
-```
-
-Exemplo de menor caminho:
-
-```
-IP de origem: 82.66.191.65
-IP de destino: 194.149.162.250
-
-Caminho encontrado!
-82.66.191.65->192.168.3.1->194.149.162.248->194.149.162.250->
-Número de saltos: 3
-```
-
-Exemplo de roteadores críticos:
-
-```
-0. 20.157.222.42 || In-degree: 7
-1. 176.52.248.125 || In-degree: 3
-2. 213.140.50.187 || In-degree: 3
-3. 213.140.36.233 || In-degree: 2
-4. 213.140.36.3 || In-degree: 2
-```
 
 ---
 
@@ -544,7 +499,9 @@ O `unordered_map` foi usado para armazenar os nós do grafo porque permite busca
 
 O `unordered_set` foi usado nos links de cada nó para evitar arestas duplicadas automaticamente, já que conjuntos não permitem elementos repetidos.
 
-O `inDegrees` foi mantido como um mapa separado, atualizado incrementalmente a cada inserção, para que a consulta dos roteadores críticos não precise recalcular os graus de entrada no momento da execução.
+O `inDegree` ficou dentro de cada nó porque o valor já pertence à própria estrutura do grafo e é atualizado no momento em que a aresta é inserida.
+
+A função `gerar_dot_path` usa `auto` como parâmetro porque esse recurso só existe a partir do C++20.
 
 A `queue` foi usada na BFS porque ela processa os nós por ordem de chegada (FIFO), garantindo que os nós mais próximos da origem sejam visitados antes dos mais distantes — o que é exatamente o comportamento necessário para encontrar o menor caminho em um grafo sem pesos.
 
