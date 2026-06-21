@@ -62,7 +62,7 @@ for (const auto& [key, node] : graph)
 Para compilar:
 
 ```bash
-g++ -std=c++17 main.cpp -o graphroute
+g++ -std=c++20 main.cpp -o graphroute
 ```
 
 Como o `main.cpp` já inclui o `graphroute.cpp` diretamente, a compilação é feita apenas com o `main.cpp`.
