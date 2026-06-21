@@ -214,7 +214,7 @@ int main(int argc, char* argv[]) {
         }
         case 3: {
  
-            grafo.diameter();
+            cout << "Diâmetro do grafo: " << grafo.diameter() << "\n";
             break;
         }
         case 4: {
