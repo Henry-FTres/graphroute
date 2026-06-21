@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <limits>
 #include "graphroute.cpp"
  
  
@@ -33,6 +34,12 @@ int menu(){
              << "================================================================\n"
              << "Escolha uma opção: ";
         cin >> opcao;
+        if (cin.fail()) { // tratamento de erro para caso do cin falhar
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
+            continue;
+        }
         cin.ignore();
         if (opcao == 1 || opcao == 2 || opcao == 3 || opcao == 4 || opcao == 0) {
             return opcao;
@@ -59,6 +66,12 @@ int submenu() {
              << "================================================================\n"
              << "Opção:";
         cin >> opcao;
+        if (cin.fail()) {// tratamento de erro para caso do cin falhar
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\x1b[1;38;5;221;48;5;88mOpção inválida. Tente novamente.\x1b[0m\n";
+            continue;
+        }
         cin.ignore();
         if (opcao == 1 || opcao == 2 || opcao == 3) {
             return opcao;
