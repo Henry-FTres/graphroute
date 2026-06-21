@@ -130,7 +130,7 @@ A função usa `stringstream` para tratar a linha como um fluxo de entrada. O se
 auto fields = split(auxiliar, ',');
 ```
 
-Assim, cada linha do CSV é dividida em campos e armazenada num `vector<string>` para acesso por posição.
+Assim, cada linha é dividida em campos e armazenada num `vector<string>` para acesso por posição.
 
 ---
 
@@ -254,12 +254,7 @@ O grafo é armazenado em um `unordered_map`:
 std::unordered_map<T, node> graph;
 ```
 
-A chave é o endereço IP e o valor é o nó correspondente. Exemplo:
-
-```
-"192.168.0.1" -> node
-"10.0.0.1"    -> node
-```
+A chave é o endereço IP e o valor é o nó correspondente.
 
 Essa estrutura foi usada porque permite encontrar qualquer nó a partir do seu IP em tempo O(1) médio.
 
@@ -495,48 +490,6 @@ input_1_path.pdf
 
 Os nomes são derivados automaticamente do nome do arquivo de entrada informado na execução.
 
----
-
-## EXEMPLO DE USO
-
-Compilar:
-
-```bash
-g++ -std=c++20 main.cpp -o graphroute
-```
-
-Executar:
-
-```bash
-./graphroute input_1.log
-```
-
-Saída inicial:
-
-```
-Grafo de roteamento inicializado
-Vértices únicos (IPs): 342 | Arestas: 812
-```
-
-Exemplo de menor caminho:
-
-```
-IP de origem: 82.66.191.65
-IP de destino: 194.149.162.250
-
-Caminho encontrado (3 saltos):
-82.66.191.65->192.168.3.1->194.149.162.248->194.149.162.250->
-```
-
-Exemplo de roteadores críticos:
-
-```
-0. 20.157.222.42 || In-degree: 7
-1. 176.52.248.125 || In-degree: 3
-2. 213.140.50.187 || In-degree: 3
-3. 213.140.36.233 || In-degree: 2
-4. 213.140.36.3 || In-degree: 2
-```
 
 ---
 

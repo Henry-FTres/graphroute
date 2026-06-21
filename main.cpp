@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
     while(getline(arq, auxiliar)){
         auto fields = split(auxiliar, ',');
 
-        if(fields.size() < 7){ 
+        if(fields.size() < 6){ 
             continue;
         }
         else if(fields[5] == "*" || fields[4] == "" || fields[5] == ""){
