@@ -82,12 +82,13 @@ auto path(graph::GraphRoute<string>& grafo)
         std::cout << "Nenhum caminho encontrado!\n";
     } else {
         cout << "Caminho encontrado (" << path.size() - 1 << " saltos):\n";//o número de saltos é o número de nós - 1, porque o caminho inclui o nó de origem.
-    }
-    return path;
         for (auto p : path)
             std::cout << p->value << "->";
-
+    
         std::cout << "\n";
+    }
+    
+    return path;
 }
  
  
