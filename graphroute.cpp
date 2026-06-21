@@ -1,6 +1,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
+#include <iostream>
 #include <queue>
 #include <vector>
 #include <algorithm>
@@ -151,7 +152,9 @@ public:
         std::string command = "dot -Tpng /tmp/graphviz.dot -o ";
         command += nome_arquivo;
         command += ".png";
-        system(command.c_str());
+        if (system(command.c_str()) == 0) {
+            std::cout << "Arquivo " << nome_arquivo << ".png gerado com sucesso\n";
+        }
     }
  
     void showDoc(std::string nome_arquivo) {
@@ -159,7 +162,9 @@ public:
         std::string command = "dot -Tpdf /tmp/graphviz.dot -o ";
         command += nome_arquivo;
         command += ".pdf";
-        system(command.c_str()); //c_str converte a string C++ para o formato que system() aceita.
+        if (system(command.c_str()) == 0) {
+            std::cout << "Arquivo " << nome_arquivo << ".pdf gerado com sucesso\n";
+        }
     }
 
     void showScreenPath(const std::vector<node*>& caminho) {
@@ -173,7 +178,9 @@ public:
         command += nome_arquivo;
         command += "_path";
         command += ".png";
-        system(command.c_str());
+        if (system(command.c_str()) == 0) {
+            std::cout << "Arquivo " << nome_arquivo << "_path.png gerado com sucesso\n";
+        }
     }
  
     void showDocPath(std::string nome_arquivo, const std::vector<node*>& caminho) {
@@ -182,7 +189,9 @@ public:
         command += nome_arquivo;
         command += "_path";
         command += ".pdf";
-        system(command.c_str()); //c_str converte a string C++ para o formato que system() aceita.
+        if (system(command.c_str()) == 0) {
+            std::cout << "Arquivo " << nome_arquivo << "_path.pdf gerado com sucesso\n";
+        }
     }
    
 
