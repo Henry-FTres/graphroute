@@ -20,7 +20,7 @@ As funcionalidades disponíveis são: exibição visual do grafo, busca de menor
 
 Para compilar e executar o projeto, é necessário ter:
 
-- Compilador C++ com suporte ao padrão C++17
+- Compilador C++ com suporte ao padrão C++20
 - Graphviz, para gerar e visualizar os grafos
 
 No Linux, o compilador pode ser instalado com:
@@ -53,7 +53,7 @@ Se aparecer a versão instalada, a instalação foi concluída corretamente.
 
 ### Compilação
 
-O projeto usa o padrão C++17, pois o código faz uso de structured bindings, como por exemplo:
+O projeto usa o padrão C++20, pois o código faz uso de structured bindings, como por exemplo:
 
 ```cpp
 for (const auto& [key, node] : graph)
@@ -499,7 +499,7 @@ Os nomes são derivados automaticamente do nome do arquivo de entrada informado 
 Compilar:
 
 ```bash
-g++ -std=c++17 main.cpp -o graphroute
+g++ -std=c++20 main.cpp -o graphroute
 ```
 
 Executar:
