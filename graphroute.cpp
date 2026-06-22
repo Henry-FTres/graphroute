@@ -144,7 +144,9 @@ public:
  
     void showScreen() {
         gerar_dot();
-        system("dot -Tx11 /tmp/graphviz.dot"); //dot = programa, Tx11 = opção que define o tipo da saída, /tmp/graphviz.dot = arquivo de entrada.
+        if (system("dot -Tx11 /tmp/graphviz.dot") != 0) {
+            std::cout << "Erro ao exibir o grafo. O graphviz está instalado?\n";
+        }
     }
  
     void showPng(std::string nome_arquivo){
